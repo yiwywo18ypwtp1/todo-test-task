@@ -3,17 +3,10 @@ import * as taskService from "../services/tasks.service"
 import { TasksStatus } from "@prisma/client";
 
 export const createTask = async (req: Request, res: Response) => {
-    const { title, description, status } = req.body;
     const userId = (req as any).user.id;
 
     try {
-        const result = await taskService.create({
-            title,
-            description,
-            status: status as TasksStatus,
-            userId
-        });
-
+        const result = await taskService.create(req.body, userId);
         res.json(result);
     } catch (err: any) {
         res.status(err.status || 500).json({

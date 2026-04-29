@@ -1,35 +1,19 @@
 import { prisma } from "../db";
 import { TasksStatus } from "@prisma/client";
 import { UserId } from "../types/user";
+import { CreateTask, UpdateTask } from "../types/task";
+
 
 type TaskId = number;
 
-type CreateTask = {
-    title: string;
-    description?: string;
-    status?: TasksStatus;
-    userId: number;
-};
-
-type UpdateTask = Partial<{
-    title: string;
-    description?: string;
-    status: TasksStatus;
-}>;
-
-export const create = async ({
-    title,
-    description,
-    status = "TODO",
-    userId
-}: CreateTask) => {
+export const create = async (data: CreateTask, userId: number) => {
     return prisma.task.create({
         data: {
-            title,
-            description,
-            status,
-            userId
-        }
+            title: data.title,
+            description: data.description,
+            status: data.status ?? "TODO",
+            userId,
+        },
     });
 };
 
